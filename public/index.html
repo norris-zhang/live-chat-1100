@@ -4,8 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Live Chat</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <h1>Welcome to live chat</h1>
+    <div class="main">
+        <h1>Welcome to the live chat room</h1>
+        <h3>What is your nickname?</h3>
+        <div class="controls">
+            <form action="/join" method="post">
+                <div><input type="text" name="nickname"></div>
+                <div><button>Join</button></div>
+            </form>
+        </div>
+        
+    </div>
 </body>
 </html>

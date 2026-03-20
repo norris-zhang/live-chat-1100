@@ -1,0 +1,28 @@
+.main {
+    width: 800px;
+    background-color: aqua;
+    margin: 50px auto;
+    padding-bottom: 50px;
+}
+
+.main h1,h3 {
+    text-align: center;
+}
+
+.main .controls {
+    width: 50%;
+    margin: 10px auto;
+}
+
+.main .controls input {
+    width: 100%;
+    font-size: 2rem;
+    text-align: center;
+}
+
+.main .controls button {
+    display: block;
+    width: 200px;
+    font-size: 2rem;
+    margin: 10px auto;
+}
