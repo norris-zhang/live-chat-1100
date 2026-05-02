@@ -18,11 +18,29 @@
                 <% } %>
         </div>
         <div class="chat-form">
-            <input type="text">
-            <button>Send</button>
+            <form action="" id="sendMessageForm">
+                <input type="text" id="messageBox">
+                <button>Send</button>
+            </form>
+            
         </div>
     </div>
     <script>
+        function sendMessage() {
+            const messageContent = document.getElementById('messageBox').value;
+            if (messageContent.trim() === '') {
+                return;
+            }
+
+            fetch('/send', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({messageContent})
+            });
+
+        }
         async function poll() {
             const response = await fetch('/poll');
             const data = await response.json();
@@ -32,6 +50,10 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             poll();
+            document.getElementById('sendMessageForm').addEventListener('submit', e => {
+                e.preventDefault();
+                sendMessage();
+            });
         });
 
 

@@ -9,6 +9,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
@@ -28,6 +29,12 @@ app.post('/join', (req, res) => {
 
 app.get('/poll', (req, res) => {
     res.send(JSON.stringify(chat));
+});
+
+app.post('/send', (req, res) => {
+    const msg = req.body.messageContent;
+    console.log(msg);
+    res.send('OK');
 });
 
 
