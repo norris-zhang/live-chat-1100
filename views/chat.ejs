@@ -10,10 +10,10 @@
 
 <body>
     <div class="chat-page">
-        <div class="chat-history">
+        <div id="chatHistory" class="chat-history">
             <% for (const his of chat.history) { %>
                 <div>
-                    <%= his %>
+                    <%= his.nickname + ': ' + his.message %>
                 </div>
                 <% } %>
         </div>
@@ -26,6 +26,7 @@
         </div>
     </div>
     <script>
+        const nickname = '<%= nickname %>';
         function sendMessage() {
             const messageContent = document.getElementById('messageBox').value;
             if (messageContent.trim() === '') {
@@ -37,7 +38,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({messageContent})
+                body: JSON.stringify({messageContent, nickname})
             });
 
         }
@@ -45,6 +46,7 @@
             const response = await fetch('/poll');
             const data = await response.json();
             console.log(data);
+            document.getElementById('chatHistory').innerHTML = data.history.map(his => `<p>${his.nickname}: ${his.message}</p>`).join('');
             setTimeout(poll, 2000);
         }
 
