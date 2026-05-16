@@ -8,6 +8,7 @@
     width: 100%;
     height: 85%;
     background-color: blueviolet;
+    overflow-y: auto;
 }
 
 .chat-form {
@@ -24,4 +25,12 @@
 .chat-form button {
     width: 10%;
     height: 80%
+}
+
+.system-msg {
+    color: aliceblue;
+}
+
+.myself-msg {
+    color: chartreuse;
 }
