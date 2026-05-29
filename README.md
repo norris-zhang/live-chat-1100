@@ -9,3 +9,9 @@ This is a `live chatting room`. People can join and chat freely.
 ```
 $ node index.js
 ```
+
+## issue tracking
+- (done) `/poll` returns only new messages.
+- Display message date time.
+
+- The frontend should recover from server restart.

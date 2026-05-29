@@ -13,7 +13,7 @@ app.use(express.json());
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-
+let messageId = 1;
 
 const chat = {
     users: [],
@@ -23,16 +23,21 @@ const chat = {
 app.post('/join', (req, res) => {
     const nickname = req.body.nickname;
     chat.users.push(nickname);
+    const userJoinMessageId = messageId++;
     chat.history.push({
+        id: userJoinMessageId,
         nickname: 'System',
         message: `Welcome ${nickname} to join the chat.`,
         datetime: new Date(),
     });
-    res.render('chat', { chat, nickname });
+    res.render('chat', { chat, nickname, userJoinMessageId });
 });
 
 app.get('/poll', (req, res) => {
-    res.send(JSON.stringify(chat));
+    const lastMessageId = Number(req.query.lastMessageId);
+    res.status(200).json({
+        history: chat.history.filter(his => his.id > lastMessageId)
+    });
 });
 
 app.post('/send', (req, res) => {
@@ -40,6 +45,7 @@ app.post('/send', (req, res) => {
     const nickname = req.body.nickname;
     console.log(msg, ' ', nickname);
     chat.history.push({
+        id: messageId++,
         nickname: nickname,
         message: msg,
         datetime: new Date(),
