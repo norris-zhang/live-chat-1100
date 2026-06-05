@@ -34,3 +34,8 @@
 .myself-msg {
     color: chartreuse;
 }
+
+.message-datetime {
+    font-size: 0.7rem;
+    color: palegoldenrod;
+}

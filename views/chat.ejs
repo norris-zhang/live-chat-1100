@@ -11,15 +11,10 @@
 <body>
     <div class="chat-page">
         <div id="chatHistory" class="chat-history">
-            <% for (const his of chat.history) { %>
-                <div>
-                    <%= his.nickname + ': ' + his.message %>
-                </div>
-                <% } %>
         </div>
         <div class="chat-form">
             <form action="" id="sendMessageForm">
-                <input type="text" id="messageBox">
+                <input type="text" id="messageBox" autocomplete="off">
                 <button>Send</button>
             </form>
             
@@ -27,7 +22,7 @@
     </div>
     <script>
         const nickname = '<%= nickname %>';
-        const lastMessageId = '<%= userJoinMessageId-1 %>';
+        let lastMessageId = '<%= userJoinMessageId-1 %>';
 
         let autoScroll = true;
         function sendMessage() {
@@ -52,10 +47,10 @@
             const data = await response.json();
             console.log(data);
 
+            const chatHisElem = document.getElementById('chatHistory');
             if (data.history.length > 0) {
-                const chatHisElem = document.getElementById('chatHistory');
                 chatHisElem.innerHTML += data.history
-                .map(his => `<p class="${getClassNameByNickname(his.nickname)}">${his.nickname}: ${his.message}</p>`)
+                .map(his => `<p class="${getClassNameByNickname(his.nickname)}"><span class="message-datetime">${displayedDateTime(new Date(his.datetime))}</span><br>${his.nickname}: ${his.message}</p>`)
                 .join('');
                 lastMessageId = data.history[data.history.length-1].id;
             }
@@ -63,7 +58,7 @@
                 chatHisElem.scrollTop = chatHisElem.scrollHeight;
             }
 
-            setTimeout(poll, 10000);
+            setTimeout(poll, 400);
         }
 
         function getClassNameByNickname(theNickname) {
@@ -89,6 +84,24 @@
                 autoScroll = bottomSpace < 5;
             });
         });
+
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        function displayedDateTime(dateTime) {
+            const nowDate = new Date();
+            const now = nowDate.getTime();
+            if (now - dateTime.getTime() < 60*1000) {
+                return 'Now';
+            }
+            if (now - dateTime.getTime() < 60*60*1000) {
+                return `${Math.round((now - dateTime.getTime())/1000/60)} minutes ago`;
+            }
+            if (nowDate.getFullYear() === dateTime.getFullYear()
+                && nowDate.getMonth() === dateTime.getMonth()
+                && nowDate.getDate() === dateTime.getDate()) {
+                    return `${dateTime.getHours()}:${dateTime.getMinutes()}`;
+            }
+            return `${dateTime.getDate()} ${months[dateTime.getMonth()]} ${dateTime.getHours()}:${dateTime.getMinutes()}`
+        }
 
 
 
