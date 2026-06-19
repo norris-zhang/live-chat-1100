@@ -11,12 +11,35 @@
         <h1>Welcome to the live chat room</h1>
         <h3>What is your nickname?</h3>
         <div class="controls">
-            <form action="/join" method="post">
-                <div><input type="text" name="nickname" autocomplete="off" autofocus></div>
+            <form action="/join" method="post" id="loginForm">
+                <div><input type="text" name="nickname" autocomplete="off" autofocus id="nickname"></div>
                 <div><button>Join</button></div>
             </form>
         </div>
         
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('loginForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                /////// validation
+                const nickname = document.getElementById('nickname').value;
+                if (nickname.trim() === '') {
+                    return;
+                }
+                if (await nicknameExists(nickname)) {
+                    alert('Duplicate nickname, try another one.');
+                    return;
+                }
+                e.target.submit();
+            });
+        });
+
+        async function nicknameExists(nickname) {
+            // 1. fetch server /nickname/exists
+            // 2. get response data
+            // 3. return true or false
+        }
+    </script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import {readFile, writeFile} from 'fs/promises';
+import { saveChatHistory, loadChatHistory } from './chat-history.js';
 
 const app = express();
 
@@ -15,12 +15,17 @@ app.set('views', path.join(__dirname, 'views'));
 
 let messageId = 1;
 
-const chat = {
+let chat = {
     users: [],
     history: []
 };
 
-app.post('/join', (req, res) => {
+const chatHistory = await loadChatHistory();
+if (chatHistory) {
+    chat = chatHistory;
+}
+
+app.post('/join', async (req, res) => {
     const nickname = req.body.nickname;
     chat.users.push(nickname);
     const userJoinMessageId = messageId++;
@@ -30,6 +35,7 @@ app.post('/join', (req, res) => {
         message: `Welcome ${nickname} to join the chat.`,
         datetime: new Date(),
     });
+    await saveChatHistory(chat);
     res.render('chat', { chat, nickname, userJoinMessageId });
 });
 
@@ -40,7 +46,7 @@ app.get('/poll', (req, res) => {
     });
 });
 
-app.post('/send', (req, res) => {
+app.post('/send', async (req, res) => {
     const msg = req.body.messageContent;
     const nickname = req.body.nickname;
     console.log(msg, ' ', nickname);
@@ -50,6 +56,7 @@ app.post('/send', (req, res) => {
         message: msg,
         datetime: new Date(),
     });
+    await saveChatHistory(chat);
     res.send('OK');
 });
 

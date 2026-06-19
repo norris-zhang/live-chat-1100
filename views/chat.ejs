@@ -42,6 +42,8 @@
             document.getElementById('messageBox').value = '';
 
         }
+
+        let pollInterval = 400;
         async function poll() {
             try {
                 const response = await fetch('/poll?lastMessageId=' + lastMessageId);
@@ -57,12 +59,13 @@
                 if (autoScroll) {
                     chatHisElem.scrollTop = chatHisElem.scrollHeight;
                 }
+                pollInterval = 400;
             } catch (error) {
                 console.error(error);
+                pollInterval = Math.min(pollInterval * 2, 30000);
             }
-            
 
-            setTimeout(poll, 400);
+            setTimeout(poll, pollInterval);
         }
 
         function getClassNameByNickname(theNickname) {

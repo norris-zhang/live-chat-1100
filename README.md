@@ -14,6 +14,8 @@ $ node index.js
 - (done) `/poll` returns only new messages.
 - (done) Display message date time.
 - (done) every 30 seconds we update all the date time.
-
-- The frontend should recover from server restart.
-- persist chat history.
+- (done) The frontend should recover from server restart.
+- (done) persist chat history.
+- nickname validation
+- private message
+- detect user logout.
