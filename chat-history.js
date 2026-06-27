@@ -7,7 +7,12 @@ export async function saveChatHistory(chat) {
 export async function loadChatHistory() {
     try {
         const rawData = await readFile('chat_history.json', 'utf-8');
-        return JSON.parse(rawData);
+        return JSON.parse(rawData, (key, value) => {
+            if (key === 'datetime') {
+                return new Date(value);
+            }
+            return value;
+        });
     } catch (err) {
         if (err.code === 'ENOENT') {
             console.log('chat_history.json does not exist. Fresh start');

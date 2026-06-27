@@ -23,6 +23,7 @@ let chat = {
 const chatHistory = await loadChatHistory();
 if (chatHistory) {
     chat = chatHistory;
+    messageId = Math.max(...chat.history.map(his => his.id)) + 1;
 }
 
 app.post('/join', async (req, res) => {
@@ -46,6 +47,12 @@ app.get('/poll', (req, res) => {
     });
 });
 
+app.get('/nickname-exists', (req, res) => {
+    res.status(200).json({
+        exists: chat.users.map(u => u.toLowerCase()).includes(req.query.n.toLowerCase())
+    });
+});
+
 app.post('/send', async (req, res) => {
     const msg = req.body.messageContent;
     const nickname = req.body.nickname;
@@ -60,7 +67,11 @@ app.post('/send', async (req, res) => {
     res.send('OK');
 });
 
+const port = process.argv[2] ? Number(process.argv[2]) : 3000;
+if (!Number.isInteger(port)) {
+    throw new Error('Invalid port number ' + process.argv[2]);
+}
 
-app.listen(3000, () => {
-    console.log('Server is running on http://localhost:3000');
+app.listen(port, () => {
+    console.log('Server is running on http://localhost:'+port);
 });

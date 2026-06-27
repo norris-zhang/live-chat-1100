@@ -37,8 +37,11 @@
 
         async function nicknameExists(nickname) {
             // 1. fetch server /nickname/exists
+            const response = await fetch('/nickname-exists?n=' + encodeURIComponent(nickname));
             // 2. get response data
+            const data = await response.json();
             // 3. return true or false
+            return data.exists;
         }
     </script>
 </body>
